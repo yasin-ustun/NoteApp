@@ -1,0 +1,107 @@
+﻿@model List<NoteApp.Model.NoteModel>
+
+@using NoteApp.Controllers
+
+@{
+    ViewBag.Title = "Notlar";
+}
+
+    <script type="text/javascript">
+        $(function () {
+
+            var whatsappUrl = "whatsapp://send?text=";
+
+        $(".chkPublish").click(function () {
+            var noteId = $(this).data("id");
+            var _val = $(this).is(":checked");
+            var url = '@Url.Action("ShareNote", "Note")';
+            var _data = { NoteId: noteId, value: _val };
+
+            $.ajax({
+                url: url,
+                type: 'Post',
+                dataType: 'json',
+                data: _data,
+                //contentType: "application/json; charset=utf-8",
+                success: function (result) {
+                    if (result.success) {
+                        whatsappUrl = whatsappUrl + $("#a" + noteId).data("url");
+
+                        if (_val) {
+                            $("#a" + noteId).prop("href", whatsappUrl);
+                        }
+                        else {
+                            $("#a" + noteId).prop("href", "javascript:void(0)");
+                        }
+
+                        
+
+                        alert(result.content);
+                    }
+                    else {
+
+                        
+                        alert(result.message);
+                    }
+                }
+            });
+        });
+    })
+    </script>
+
+<div class="row">
+    <div class="col-md-10 middle" style="text-align:center;">
+
+        <h3>Notlarım</h3>
+    </div>
+</div>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Konu</th>
+            <th scope="col">Düzenle</th>
+            <th scope="col">Sil</th>
+            <th scope="col">Paylaş</th>
+            <th scope="col">Yayınlanabilir</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            var count = 1;
+            foreach (var item in Model)
+            {
+                var isPublished = "0";
+
+                if (item.IsPublished)
+                {
+                    isPublished = "1";
+                }
+
+                var url = "https://noteapp.ustunsoft.com/" + Url.Action("NoteInfo", "Note", new { NoteId = MainController.Encode(item.NoteId.ToString() + "|" + isPublished) });
+
+                var _checked = string.Empty;
+
+                var href = "javascript:void(0)";
+
+                if (item.IsPublished)
+                {
+                    _checked = "checked";
+                    href = "whatsapp://send?text=" + url;
+                }
+
+                <tr>
+                    <th scope="row">@count</th>
+                    <td style="text-align:left;">@Html.ActionLink(item.Subject, "NoteInfo", "Note", new { NoteId = MainController.Encode(item.NoteId.ToString()) }, null)</td>
+                    <td><a href="@Url.Action("UpdateNote", "Note", new { p = MainController.Encode(item.NoteId.ToString()) })"><i class="fa fa-edit"></i></a></td>
+                    <td><a href="@Url.Action("DeleteNote", "Note", new { NoteId = MainController.Encode(item.NoteId.ToString()) })"><i class="fa fa-trash-o"></i></a></td>
+                    <td><a id="@string.Format("a{0}",item.NoteId)" href="@href" data-url="@url" data-action="share/whatsapp/share" class="share"><i class="fa fa-whatsapp"></i></a></td>
+                    <td><input type="checkbox" name="chkPublish" class="chkPublish checkbox" data-id="@item.NoteId" @_checked/></td>
+                </tr>
+
+                count++;
+            }
+        }
+    </tbody>
+</table>

@@ -1,0 +1,124 @@
+﻿
+<style>
+    .editorBtn {
+        float: left;
+        margin: 5px;
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <button class="editorBtn" onclick="execCmd('bold');"><i class="fa fa-bold"></i></button>
+        <button class="editorBtn" onclick="execCmd('italic');"><i class="fa fa-italic"></i></button>
+        <button class="editorBtn" onclick="execCmd('underline');"><i class="fa fa-underline"></i></button>
+        <button class="editorBtn" onclick="execCmd('strikethrough');"><i class="fa fa-strikethrough"></i></button>
+        <button class="editorBtn" onclick="execCmd('justifyLeft');"><i class="fa fa-align-left"></i></button>
+        <button class="editorBtn" onclick="execCmd('justifyCenter');"><i class="fa fa-align-center"></i></button>
+        <button class="editorBtn" onclick="execCmd('justifyRight');"><i class="fa fa-align-right"></i></button>
+        <button class="editorBtn" onclick="execCmd('justifyFull');"><i class="fa fa-align-justify"></i></button>
+        <button class="editorBtn" onclick="execCmd('cut');"><i class="fa fa-cut"></i></button>
+        <button class="editorBtn" onclick="execCmd('copy');"><i class="fa fa-copy"></i></button>
+        <button class="editorBtn" onclick="execCmd('indent');"><i class="fa fa-indent"></i></button>
+        <button class="editorBtn" onclick="execCmd('outdent');"><i class="fa fa-dedent"></i></button>
+        <button class="editorBtn" onclick="execCmd('undo');"><i class="fa fa-undo"></i></button>
+        <button class="editorBtn" onclick="execCmd('redo');"><i class="fa fa-repeat"></i></button>
+        <button class="editorBtn" onclick="execCmd('insertUnorderedList');"><i class="fa fa-list-ul"></i></button>
+        <button class="editorBtn" onclick="execCmd('insertOrderedList');"><i class="fa fa-list-ol"></i></button>
+        <div class="editorBtn">
+            <select onchange="execCmd('formatBlock', this.value);">
+                <option value="H1">Başlık 1</option>
+                <option value="H2">Başlık 2</option>
+                <option value="H3">Başlık 3</option>
+                <option value="H4">Başlık 4</option>
+                <option value="H5">Başlık 5</option>
+                <option value="H6">Başlık 6</option>
+            </select>
+        </div>
+        <button class="editorBtn" onclick="execCmd('insertHorizontalRule');">HR</button>
+        <button class="editorBtn" onclick="execCmd('createLink', prompt('URL Girin', 'http://'));"><i class="fa fa-link"></i></button>
+        <button class="editorBtn" onclick="execCmd('unlink');"><i class="fa fa-unlink"></i></button>
+        <div class="editorBtn">
+            Yazı Tipi :
+            <select onchange="execCmd('fontName', this.value);">
+                <option value="Arial">Arial</option>
+                <option value="Comic Sans MS">Comic Sans MS</option>
+                <option value="Courier">Courier</option>
+                <option value="Georgia">Georgia</option>
+                <option value="Tahoma">Tahoma</option>
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Verdana">Verdana</option>
+            </select>
+        </div>
+        <div class="editorBtn">
+
+            Yazı Boyutu :
+            <select onchange="execCmd('fontSize', this.value);">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+            </select>
+        </div>
+        <div class="editorBtn">Yazı Rengi: <input type="color" name="name" onchange="execCmd('foreColor', this.value);" /></div>
+        <div class="editorBtn">Yazı ArkaPlan Rengi: <input type="color" name="name" onchange="execCmd('hiliteColor', this.value);" /></div>
+
+        <button class="editorBtn" onclick="execCmd('insertImage', prompt('Resim URL i girin', ''));"><i class="fa fa-file-image-o"></i></button>
+        <button class="editorBtn" onclick="execCmd('selectAll');">Hepsini Seç</button>
+        <button class="editorBtn" onclick="createTable();">Tablo Oluştur</button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <iframe name="textEditor" style="width:100%; height:500px;" class="form-control"></iframe>
+    </div>
+</div>
+
+<script>
+    function enableEditMode() {
+        textEditor.document.designMode = 'On';
+    }
+
+    function execCmd(command, argument) {
+        textEditor.document.execCommand(command, false, argument);
+    }
+
+    function Save() {
+        alert(textEditor.document.getElementByTagName('body').textContent);
+    }
+
+    var showSource = false;
+
+    function toggleSource() {
+        if (showSource) {
+            textEditor.document.getElementsByTagName('body')[0].innerHTML = textEditor.document.getElementsByTagName('body')[0].textContent;
+            showSource = false;
+        }
+        else {
+            textEditor.document.getElementsByTagName('body')[0].textContent = textEditor.document.getElementsByTagName('body')[0].innerHTML;
+            showSource = true;
+        }
+    }
+
+    var toggle = false;
+    function toggleEdit() {
+        if (toggle) {
+            textEditor.document.designMode = 'On';
+            toggle = false;
+        }
+        else {
+            textEditor.document.designMode = 'Off';
+            toggle = true;
+        }
+    }
+
+    function createTable() {
+        //textEditor.document.getElementsByTagName('body')[0].appendChild('<div style="background:green;width:50px;height:100px;"></div>');
+        textEditor.document.execCommand('insertHTML', true, '<div style="background:green;width:50px;height:100px;"></div>');
+        textEditor.document.execCommand('insertHTML', false, '<table border="1"><tr></tr><tr><td>123</td></tr></table>');
+        textEditor.document.execCommand('insertHTML', false, '<div><table><tr><th>Başlık1</th><th>Başlık2</th></tr><tr><td>Hücre1</td><td>Hücre2</td></tr></table></div>');
+    }
+</script>

@@ -1,0 +1,24 @@
+﻿@model NoteApp.Model.NoteModel 
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+    $(function () {
+        $("content").html()
+    })
+</script>
+
+
+<div class="row">
+    <div id="subject" class="col-md-11 middle">
+        <h3>@Model.Subject</h3>
+    </div>
+</div>
+
+<div class="row">
+    <div id="content" class="col-md-11 middle">
+        @Html.Raw(Model.Note)
+    </div>
+</div>

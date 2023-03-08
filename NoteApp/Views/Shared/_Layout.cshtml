@@ -1,0 +1,74 @@
+﻿@using NoteApp.Utility.SessionUtility
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title | NoteApp</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</head>
+<body onload="enableEditMode();">
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            @{
+                if (ViewBag.Param != null && ViewBag.Param)
+                {
+                    <div class="navbar-header">
+                        <a href="#" class="navbar-brand">NoteApp</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        @Html.ActionLink("NoteApp", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                    </div>
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li>@Html.ActionLink("Kategori Oluştur", "Index", "Category")</li>
+                            <li>@Html.ActionLink("Not Oluştur", "Index", "Note")</li>
+
+                            @{
+
+                                if (!string.IsNullOrEmpty(SessionPackage.FullName))
+                                {
+                                    <li>@Html.ActionLink(SessionPackage.FullName.ToString(), "Index", "User")</li>
+                                    <li>@Html.ActionLink("Çıkış", "Logout", "Login")</li>
+                                }
+                                else
+                                {
+                                    <li>@Html.ActionLink("Giriş", "Index", "Login")</li>
+                                    <li>@Html.ActionLink("Üye Ol", "Index", "User")</li>
+                                }
+                            }
+
+                        </ul>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - NoteApp</p>
+        </footer>
+    </div>
+</body>
+</html>

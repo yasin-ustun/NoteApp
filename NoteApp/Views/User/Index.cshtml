@@ -1,0 +1,88 @@
+﻿@model NoteApp.Model.UserModel
+
+@using NoteApp.Controllers;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+    $(function () {
+        $("#showPass").change(function () {
+            var checked = $(this).is(":checked");
+            if (checked) {
+                $("#Password").attr("type", "text");
+            } else {
+                $("#Password").attr("type", "password");
+            }
+        });
+    });
+
+</script>
+
+@using (Html.BeginForm())
+{
+    HtmlHelper.ClientValidationEnabled = true;
+    <div class="row">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-6">
+                    @Html.LabelFor(m => m.Name, new { @class = "control-label", @style = "border:none;padding:6px 12px;" })
+                </div>
+                <div class="col-md-6">
+                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    @Html.LabelFor(m => m.SurName, new { @class = "control-label", @style = "border:none;padding:6px 12px;" })
+                </div>
+                <div class="col-md-6">
+                    @Html.TextBoxFor(m => m.SurName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.SurName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    @Html.LabelFor(m => m.Mail, new { @class = "control-label", @style = "border:none;padding:6px 12px;" })
+                </div>
+                <div class="col-md-6">
+                    @Html.TextBoxFor(m => m.Mail, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Mail, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            @{
+                if (MainController.DoesSessionAbandon)
+                {
+                    <div class="row">
+                        <div class="col-md-6">
+                            @Html.LabelFor(m => m.Password, new { @class = "control-label", @style = "border:none;padding:6px 12px;" })
+                        </div>
+                        <div class="col-md-6">
+                            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            @Html.Label("LblShowPass", "Şifreyi Göster", new { @class = "control-label", @style = "border:none;padding:6px 12px;" })
+                        </div>
+                        <div class="col-md-6">
+                            <input type="checkbox" id="showPass" class="checkbox" />
+                        </div>
+                    </div>
+                }
+            }
+
+            <div class="row">
+                <div class="col-md-6">
+                    <input class="form-control" type="submit" name="btnSaveUser" value="Üye Ol" />
+                </div>
+            </div>
+        </div>
+    </div>
+}

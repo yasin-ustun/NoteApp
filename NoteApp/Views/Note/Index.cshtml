@@ -1,0 +1,100 @@
+﻿@model NoteApp.Model.NoteModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <script type="text/javascript">
+    $(function () {
+
+        @{
+            if(Model != null)
+            {
+                @:textEditor.document.getElementsByTagName('body')[0].innerHTML = "@Html.Raw(Model.Note.Replace("\"","'"))";
+            }
+        }
+
+
+        $("#btnSave").click(function () {
+
+            var noteId = $("#NoteId").val();
+            var _subject = $("#Subject").val();
+            var note = textEditor.document.getElementsByTagName('body')[0].innerHTML;
+            var categoryId = $("#CategoryId").val();
+
+            var _data = { NoteId : noteId, Note: note, Subject: _subject, CategoryId: categoryId };
+
+
+            var url = '@Url.Action("SaveNote", "Note")';
+
+            $.ajax({
+                type: "Post",
+                url: url,
+                data: JSON.stringify(_data),
+                contentType: "application/json; charset=utf-8",
+                success: function (result) {
+                    if (result.success) {
+                        alert(result.content);
+                        document.location = '@Url.Action("Index", "Home")';
+                    }
+                    else {
+                        alert(result.message);
+                    }
+                }
+            });
+        });
+    })
+    </script>
+
+@Html.HiddenFor(m=>m.NoteId)
+
+<div class="row">
+    <div class="col-md-11 col-sm-11 col-xs-11 middle">
+        <div class="row">
+            <div class="col-md-6 col-sm-4 col-xs-4">
+                @Html.LabelFor(m => m.CategoryId, new { @class = "control-label", @style = "border:none;padding:6px 12px;" })
+            </div>
+
+            <div class="col-md-6 col-sm-8 col-xs-8">
+                @Html.DropDownListFor(m => m.CategoryId, ViewBag.Categories as SelectList, "Seçiniz", new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 col-sm-4 col-xs-4">
+                @Html.LabelFor(m => m.Subject, new { @class = "control-label", @style = "border:none;padding:6px 12px;" })
+            </div>
+
+            <div class="col-md-6 col-sm-8 col-xs-8">
+                @Html.TextBoxFor(m => m.Subject, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-11 col-sm-11 col-xs-11">
+                @Html.LabelFor(m => m.Note, new { @class = "control-label", @style = "border:none;padding:6px 12px;" })
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                @Html.Partial("_TextEditor")
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-xs-6">
+                <button id="btnSave">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,54 @@
+﻿@model NoteApp.Model.LoginModel
+
+@{
+    ViewBag.Title = "Giriş";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@using (Html.BeginForm())
+{
+    <div id="login">
+        <div class="row">
+            <div class="col-md-4 col-sm-10 col-xs-10 middle loginContent">
+                <div class="row marginBottom">
+                    <div class="col-md-11 col-sm-11 col-xs-11">
+                        @ViewBag.NotLogged
+                    </div>
+                </div>
+
+                <div class="row marginBottom">
+                    <div class="col-md-2 col-sm-2 col-xs-3" style="text-align:center;">
+                        <i class="fa fa-user-circle-o"></i>
+                    </div>
+
+                    <div class="col-md-10 col-sm-10 col-xs-9">
+                        @Html.TextBoxFor(m => m.Mail, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Mail, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="row marginBottom">
+                    <div class="col-md-2 col-sm-2 col-xs-3" style="text-align:center;">
+                        <i class="fa fa-key"></i>
+                    </div>
+
+                    <div class="col-md-10 col-sm-10 col-xs-9">
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 col-sm-6 col-xs-6 center">
+                        <input type="submit" class="form-control" name="btnSubmit" value="Giriş" />
+                    </div>
+
+                    <div class="col-md-6 col-sm-6 col-xs-6 center">
+                        @Html.ActionLink("Şifremi unuttum", "Index", "Login")
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

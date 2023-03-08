@@ -1,0 +1,91 @@
+﻿@model NoteApp.Model.CategoryModel
+
+@using NoteApp.Model
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+    $(function () {
+
+        @{ 
+            if(ViewBag.ErrorMessage != null)
+            {
+                @:var message = "@ViewBag.ErrorMessage";
+
+                @:alert(message);
+            }
+        }
+
+        $(".editCategory").click(function () {
+            var id = $(this).data("id");
+            var name = $(this).data("name");
+
+            $("#CategoryId").val(id);
+            $("#CategoryName").val(name);
+        });
+    })
+</script>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.CategoryId)
+    <div class="row">
+        <div class="col-md-6 middle">
+            <div class="row">
+                <div class="col-md-6 col-sm-4 col-xs-4">
+                    @Html.LabelFor(m => m.CategoryName, new { @class = "control-label", @style = "border:none;padding:6px 12px;" })
+                </div>
+                <div class="col-md-6 col-sm-8 col-xs-8">
+                    @Html.TextBoxFor(m => m.CategoryName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.CategoryName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <input class="form-control" type="submit" name="btnSaveUser" value="Kaydet" />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+<div class="row">
+    <div class="col-md-10 middle" style="text-align:center;">
+        <h3>Kategorilerim</h3>
+    </div>
+</div>
+
+@if (ViewBag.Categories != null)
+{
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Kategori Adı</th>
+                <th scope="col">Düzenle</th>
+                <th scope="col">Sil</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var count = 1;
+                foreach (CategoryModel item in (List<CategoryModel>)ViewBag.Categories)
+                {
+                    <tr>
+                        <th scope="row">@count</th>
+                        <td><a>@item.CategoryName</a></td>
+                        <td><a class="editCategory" data-id="@item.CategoryId" data-name="@item.CategoryName"><i class="fa fa-edit"></i></a></td>
+                        <td><a href="@Url.Action("DeleteCategory","Category", new { CategoryId = item.CategoryId })"><i class="fa fa-trash-o"></i></a></td>
+                    </tr>
+
+                    count++;
+                }
+            }
+        </tbody>
+    </table>
+}
